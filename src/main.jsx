@@ -4,6 +4,7 @@ import {
   Activity,
   AlertTriangle,
   ArrowUpRight,
+  MessageCircle,
   Boxes,
   CheckCircle2,
   ChevronRight,
@@ -546,6 +547,7 @@ function Shell({ onLogout }) {
         </section>
 
       </main>
+<Chatbot />
 
       {toast && (
         <div className="toast">
@@ -2440,7 +2442,171 @@ function SettingsPage() {
     </div>
   );
 }
+function Chatbot() {
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
+  const [messages, setMessages] = useState([
+    {
+      role: "assistant",
+      text: "Hello! I am your Supply Chain Assistant. Ask me about inventory, products, warehouses, suppliers, orders, shipments, or stock management."
+    }
+  ]);
+
+  const [busy, setBusy] = useState(false);
+
+  async function sendMessage(e) {
+    e?.preventDefault();
+
+    const text = message.trim();
+
+    if (!text || busy) return;
+
+    setMessages((previous) => [
+      ...previous,
+      {
+        role: "user",
+        text: text
+      }
+    ]);
+
+    setMessage("");
+    setBusy(true);
+
+    try {
+      const data = await api("/chat", {
+        method: "POST",
+        body: JSON.stringify({
+          message: text
+        })
+      });
+
+      setMessages((previous) => [
+        ...previous,
+        {
+          role: "assistant",
+          text: data?.response || "I could not generate a response."
+        }
+      ]);
+    } catch (error) {
+      setMessages((previous) => [
+        ...previous,
+        {
+          role: "assistant",
+          text: `Sorry, I could not connect to the chatbot: ${error.message}`
+        }
+      ]);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <>
+      {/* FLOATING BUTTON */}
+      <button
+        type="button"
+        className="chatbot-fab"
+        onClick={() => setOpen(!open)}
+        title="Supply Chain Assistant"
+      >
+        {open ? (
+          <X size={23} />
+        ) : (
+          <MessageCircle size={23} />
+        )}
+      </button>
+
+      {/* CHAT WINDOW */}
+      {open && (
+        <div className="chatbot-window">
+
+          {/* HEADER */}
+          <div className="chatbot-header">
+            <div>
+              <strong>Supply Chain Assistant</strong>
+              <span>Online</span>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              style={{
+                width: "34px",
+                height: "34px",
+                border: "none",
+                borderRadius: "8px",
+                background: "transparent",
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer"
+              }}
+            >
+              <X size={18} />
+            </button>
+          </div>
+
+          {/* MESSAGES */}
+          <div className="chatbot-messages">
+            {messages.map((item, index) => (
+              <div
+                key={index}
+                className={`chat-message ${item.role}`}
+              >
+                {item.text}
+              </div>
+            ))}
+
+            {busy && (
+              <div className="chat-message assistant">
+                Thinking...
+              </div>
+            )}
+          </div>
+
+          {/* INPUT */}
+          <form
+            className="chatbot-input"
+            onSubmit={sendMessage}
+          >
+            <input
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Ask about your supply chain..."
+              disabled={busy}
+            />
+
+            <button
+              type="submit"
+              disabled={busy || !message.trim()}
+              style={{
+                border: "none",
+                borderRadius: "8px",
+                background: "#6366f1",
+                color: "white",
+                padding: "10px 16px",
+                cursor:
+                  busy || !message.trim()
+                    ? "not-allowed"
+                    : "pointer",
+                opacity:
+                  busy || !message.trim()
+                    ? 0.6
+                    : 1
+              }}
+            >
+              Send
+            </button>
+          </form>
+
+        </div>
+      )}
+    </>
+  );
+}
 /* =========================================================
    START APPLICATION
 ========================================================= */
