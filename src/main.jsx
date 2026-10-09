@@ -30,7 +30,7 @@ import {
 
 import "./styles.css";
 
-const API = "http://localhost:8081/api";
+const API = "https://supply-chain-management-backend.onrender.com/api";
 
 const tokenKey = "supplyflow_token";
 const userKey = "supplyflow_user";
