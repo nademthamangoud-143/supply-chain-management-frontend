@@ -1509,40 +1509,22 @@ function buildPayload(type, form) {
       totalAmount: Number(form.totalAmount)
     };
   }
-
   /* -------------------------------------------------------
      SHIPMENT
   ------------------------------------------------------- */
-if (type === "shipments") {
-  return {
-    shipmentNumber: form.shipmentNumber,
-    purchaseOrder: {
-      id: Number(form.orderId)
-    },
-    status: form.status,
-    carrierName: form.carrierName,
-    trackingNumber: form.trackingNumber,
-    shippingAddress: form.shippingAddress
-  };
-}
 
-
-/* -------------------------------------------------------
-SHIPMENT
-------------------------------------------------------- */
-if (type === "shipments") {
-return {
-shipmentNumber: form.shipmentNumber,
-purchaseOrder: {
-id: Number(form.orderId)
-},
-status: form.status,
-carrierName: form.carrierName,
-trackingNumber: form.trackingNumber,
-shippingAddress: form.shippingAddress
-};
-}
-
+  if (type === "shipments") {
+    return {
+      shipmentNumber: form.shipmentNumber,
+      purchaseOrder: {
+        id: Number(form.orderId)
+      },
+      status: form.status,
+      carrierName: form.carrierName,
+      trackingNumber: form.trackingNumber,
+      shippingAddress: form.shippingAddress
+    };
+  }
 /* -------------------------------------------------------
 STOCK MOVEMENT
 ------------------------------------------------------- */
