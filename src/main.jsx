@@ -150,6 +150,7 @@ const services = {
 
 const nav = [
   ["dashboard", "Overview", LayoutDashboard],
+  ["categories", "Categories", Boxes],
   ["inventory", "Inventory", Boxes],
   ["products", "Products", Package],
   ["orders", "Orders", ShoppingCart],
@@ -1052,14 +1053,20 @@ function CrudPage({
 
       load();
 
-    } catch (e) {
+} catch (e) {
+  console.error("Save failed:", e);
+  console.error("Backend response:", e.response?.data);
 
-      toast(
-        `Could not save: ${e.message}`
-      );
+  const backendMessage =
+    e.response?.data?.message ||
+    e.response?.data?.error ||
+    (typeof e.response?.data === "string"
+      ? e.response.data
+      : null);
 
-    }
-  }
+  toast(`Could not save: ${backendMessage || e.message}`);
+}
+
 
   /* =====================================================
      DELETE
@@ -1511,7 +1518,7 @@ function buildPayload(type, form) {
     return {
       shipmentNumber: form.shipmentNumber,
 
-      order: {
+      purchaseOrder: {
         id: Number(form.orderId)
       },
 
@@ -1521,6 +1528,8 @@ function buildPayload(type, form) {
       shippingAddress: form.shippingAddress
     };
   }
+
+
 
   /* -------------------------------------------------------
      STOCK MOVEMENT
@@ -2218,36 +2227,43 @@ function formFields(type) {
       ]
     ],
 
-    shipments: [
-      [
-        "shipmentNumber",
-        "Shipment Number"
-      ],
-      [
-        "orderId",
-        "Order ID",
-        "number"
-      ],
-      [
-        "status",
-        "Status"
-      ],
-      [
-        "carrierName",
-        "Carrier"
-      ],
-      [
-        "trackingNumber",
-        "Tracking Number"
-      ],
-      [
-        "shippingAddress",
-        "Shipping Address",
-        "textarea"
-      ]
-    ],
+shipments: [
+  [
+    "shipmentNumber",
+    "Shipment Number"
+  ],
+  [
+    "orderId",
+    "Purchase Order ID",
+    "number"
+  ],
+  [
+    "status",
+    "Status"
+  ],
+  [
+    "carrierName",
+    "Carrier"
+  ],
+  [
+    "trackingNumber",
+    "Tracking Number"
+  ],
+  [
+    "shippingAddress",
+    "Shipping Address",
+    "textarea"
+  ]
+],
+
+
 
     "stock-movements": [
+      [
+        "productId",
+        "Product ID",
+        "number"
+      ],
       [
         "productId",
         "Product ID",
