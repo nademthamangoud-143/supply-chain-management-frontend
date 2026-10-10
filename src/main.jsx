@@ -1065,6 +1065,7 @@ function CrudPage({
       : null);
 
   toast(`Could not save: ${backendMessage || e.message}`);
+  }
 }
 
 
