@@ -1645,14 +1645,15 @@ function columnsFor(type) {
       ["status", "Status"],
       ["totalAmount", "Total"]
     ],
-
-    shipments: [
-      ["id", "ID"],
-      ["shipmentNumber", "Shipment #"],
-      ["status", "Status"],
-      ["carrierName", "Carrier"],
-      ["trackingNumber", "Tracking"]
-    ],
+shipments: [
+  ["id", "ID"],
+  ["shipmentNumber", "Shipment Number"],
+  ["orderId", "Purchase Order ID", "number"],
+  ["status", "Status"],
+  ["carrierName", "Carrier"],
+  ["trackingNumber", "Tracking Number"],
+  ["shippingAddress", "Shipping Address", "textarea"]
+],
 
     "stock-movements": [
       ["id", "ID"],
