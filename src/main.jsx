@@ -1527,37 +1527,42 @@ if (type === "shipments") {
 }
 
 
+/* -------------------------------------------------------
+SHIPMENT
+------------------------------------------------------- */
+if (type === "shipments") {
+return {
+shipmentNumber: form.shipmentNumber,
+purchaseOrder: {
+id: Number(form.orderId)
+},
+status: form.status,
+carrierName: form.carrierName,
+trackingNumber: form.trackingNumber,
+shippingAddress: form.shippingAddress
+};
+}
 
-  /* -------------------------------------------------------
-     STOCK MOVEMENT
-  ------------------------------------------------------- */
-
-  if (type === "stock-movements") {
-
-    return {
-      product: {
-        id: Number(form.productId)
-      },
-
-      warehouse: {
-        id: Number(form.warehouseId)
-      },
-
-      movementType: form.movementType,
-
-      quantity: Number(form.quantity),
-
-      referenceType:
-        form.referenceType,
-
-      referenceId:
-        form.referenceId
-          ? Number(form.referenceId)
-          : null,
-
-      notes: form.notes
-    };
-  }
+/* -------------------------------------------------------
+STOCK MOVEMENT
+------------------------------------------------------- */
+if (type === "stock-movements") {
+return {
+product: {
+id: Number(form.productId)
+},
+warehouse: {
+id: Number(form.warehouseId)
+},
+movementType: form.movementType,
+quantity: Number(form.quantity),
+referenceType: form.referenceType,
+referenceId: form.referenceId
+? Number(form.referenceId)
+: null,
+notes: form.notes
+};
+}
 
   return {
     ...form
